@@ -4,6 +4,8 @@ namespace Products
 {
     using Products.Application.Handlers;
     using Products.Application.Repositories;
+    using System.Runtime.CompilerServices;
+    using Common;
 
     public class Program
     {
@@ -16,7 +18,7 @@ namespace Products
             {
                 r.RegisterServicesFromAssemblies(typeof(Program).Assembly);
             });
-
+            
 
             builder.Services.AddControllers();
 

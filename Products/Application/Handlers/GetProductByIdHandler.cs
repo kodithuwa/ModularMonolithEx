@@ -7,16 +7,16 @@ namespace Products.Application.Handlers
 {
     public class GetProductByIdHandler : IRequestHandler<GetProductByIdQuery, Product>
     {
-        private readonly IProductRepository _repository;
+        private readonly IProductRepository repository;
 
-        public GetProductByIdHandler()
+        public GetProductByIdHandler(IProductRepository repository)
         {
-            
+            this.repository = repository;
         }
 
         public async Task<Product> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            return await Task.FromResult( new Product { Id = 2, Name = "Smartphone", Price = 800 });
+            return await Task.FromResult(await this.repository.GetByIdAsync(request.Id, cancellationToken));
         }
     }
 }

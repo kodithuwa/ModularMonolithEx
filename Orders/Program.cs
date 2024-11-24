@@ -11,16 +11,21 @@ namespace Orders
     using Products.Application.Repositories;
     using System;
     using System.Reflection;
+    using Common;
 
     public class Program
     {
         private async static Task Main(string[] args)
         {
-            var serviceProvider = new ServiceCollection()
-                   .AddMediatR(r => r.RegisterServicesFromAssemblies(typeof(Products.Program).Assembly))
+            var services = new ServiceCollection();
+                   
+
+            services.AddRepositoriesFromAssembly(typeof(Products.Program).Assembly);
+
+            var serviceProvider  = services
+            .AddMediatR(r => r.RegisterServicesFromAssemblies(typeof(Products.Program).Assembly))
                    .AddMediatR(r => r.RegisterServicesFromAssemblies(typeof(Orders.Program).Assembly))
                .BuildServiceProvider();
-
             var mediator = serviceProvider.GetRequiredService<IMediator>();
 
             var orderDetails = await mediator.Send(new GetOrderWithProductDetailsQuery(1, 1));
