@@ -1,17 +1,29 @@
-using Products;
-
-var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
 
 
-// Register MediatR for all modules
-builder.Services.AddMediatR(r =>
+namespace Products
 {
-    r.RegisterServicesFromAssemblies(typeof(Program).Assembly);
-});
+    using Products.Application.Handlers;
+    using Products.Application.Repositories;
 
-// Register module-specific services
-ProductsModule.Register(services);
+    public class Program
+    {
+        private static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
-app.Run();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddMediatR(r =>
+            {
+                r.RegisterServicesFromAssemblies(typeof(Program).Assembly);
+            });
+
+
+            builder.Services.AddControllers();
+
+            var app = builder.Build();
+
+            app.MapControllers();
+            app.Run();
+        }
+    }
+}

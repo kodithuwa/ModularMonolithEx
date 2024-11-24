@@ -3,20 +3,28 @@ namespace Orders
 {
     using MediatR;
     using Microsoft.Extensions.DependencyInjection;
+    using Orders.Domain;
+    using Orders.Handlers;
+    using Orders.Queries;
+    using Products.Application.Handlers;
+    using Products.Application.Models;
+    using Products.Application.Repositories;
     using System;
+    using System.Reflection;
 
     public class Program
     {
-        private static void Main(string[] args)
+        private async static Task Main(string[] args)
         {
             var serviceProvider = new ServiceCollection()
-                   .AddMediatR(r => r.RegisterServicesFromAssemblies(typeof(Program).Assembly))
+                   .AddMediatR(r => r.RegisterServicesFromAssemblies(typeof(Products.Program).Assembly))
+                   .AddMediatR(r => r.RegisterServicesFromAssemblies(typeof(Orders.Program).Assembly))
                .BuildServiceProvider();
 
             var mediator = serviceProvider.GetRequiredService<IMediator>();
-            //var helloCommand = new HelloCommand { Name = "World" };
 
-            //var result = await mediator.Send(helloCommand);
+            var orderDetails = await mediator.Send(new GetOrderWithProductDetailsQuery(1, 1));
+            var result = orderDetails;
 
             //Console.WriteLine(result);
 
