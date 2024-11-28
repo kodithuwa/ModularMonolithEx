@@ -1,1 +1,1 @@
-Modular Monolith implementation with MediatR - Pilot Project
+Modular Monolithic implementation with MediatR - Pilot Project
